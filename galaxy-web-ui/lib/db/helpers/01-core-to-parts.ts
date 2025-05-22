@@ -29,6 +29,7 @@ const INSERT_BATCH_SIZE = 1000; // Insert 1000 messages at a time
 type NewMessageInsert = {
   id: string;
   chatId: string;
+  content: string;
   parts: any[];
   role: string;
   attachments: any[];
@@ -170,6 +171,7 @@ async function migrateMessages() {
                 return {
                   id: message.id,
                   chatId: chat.id,
+                  content: message.content,
                   parts: [{ type: 'text', text: message.content }],
                   role: message.role,
                   createdAt: message.createdAt,
@@ -183,6 +185,7 @@ async function migrateMessages() {
                 return {
                   id: message.id,
                   chatId: chat.id,
+                  content: message.content || '',
                   parts: cleanParts,
                   role: message.role,
                   createdAt: message.createdAt,
@@ -219,6 +222,7 @@ async function migrateMessages() {
         const validMessageBatch = messageBatch.map((msg) => ({
           id: msg.id,
           chatId: msg.chatId,
+          content: msg.content,
           parts: msg.parts,
           role: msg.role,
           attachments: msg.attachments,
